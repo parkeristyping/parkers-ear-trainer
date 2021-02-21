@@ -42,7 +42,7 @@ const LaunchRequestHandler = {
             || isIntentRequestWithIntentName(handlerInput, 'AMAZON.StartOverIntent')
             || isYes(handlerInput, states.PLAY_AGAIN);
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
@@ -65,7 +65,7 @@ const TrainIntentHandler = {
         return isIntentRequestWithIntentName(handlerInput, 'TrainIntent')
             || isYes(handlerInput, states.LAUNCH_EAR_TRAINER);
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.TRAINING;
@@ -87,7 +87,7 @@ const AnswerTrainingQuestionIntentHandler = {
     canHandle(handlerInput) {
         return isTrainingAnswer(handlerInput, states.TRAINING);
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
