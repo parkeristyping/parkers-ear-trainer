@@ -31,7 +31,7 @@ function isYes(handlerInput, state) {
 
 function isTrainingAnswer(handlerInput, state) {
     return isRequestType(handlerInput, 'IntentRequest')
-        && isIntentName(handlerInput, 'TrainingAnswerIntent')
+        && isIntentName(handlerInput, 'AnswerTrainingQuestionIntent')
         && isSessionState(handlerInput, state);
 }
 
