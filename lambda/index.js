@@ -42,7 +42,7 @@ const LaunchRequestHandler = {
             || isIntentRequestWithIntentName(handlerInput, 'AMAZON.StartOverIntent')
             || isYes(handlerInput, states.PLAY_AGAIN);
     },
-    async handle(handlerInput) {
+    handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
@@ -65,7 +65,7 @@ const TrainIntentHandler = {
         return isIntentRequestWithIntentName(handlerInput, 'TrainIntent')
             || isYes(handlerInput, states.LAUNCH_EAR_TRAINER);
     },
-    async handle(handlerInput) {
+    handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.TRAINING;
@@ -87,7 +87,7 @@ const AnswerTrainingQuestionIntentHandler = {
     canHandle(handlerInput) {
         return isTrainingAnswer(handlerInput, states.TRAINING);
     },
-    async handle(handlerInput) {
+    handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
@@ -477,33 +477,6 @@ async function getAvailableTypesPrompt(handlerInput) {
 const GivePetsIntentHandler = {
     canHandle(handlerInput) {
         return isIntentRequestWithIntentName(handlerInput, 'GivePetsIntent')
-            || isYes(handlerInput, states.GIVE_PETS);
-    },
-    handle(handlerInput) {
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-
-        // Translate prompts
-        const petAgainPrompt = handlerInput.t('GIVE_MORE_PETS', {
-            pet: getPetTranslations(handlerInput, sessionAttributes.pet)
-        });
-
-        const dataSources = {
-            petsResponse: handlerInput.randomT('THANKS_FOR_PETS', {context: sessionAttributes.pet.name}),
-            pet: sessionAttributes.pet,
-            petAgain: petAgainPrompt
-        };
-
-        return handlerInput.responseBuilder
-            .addDirective(utils.getAplADirective(tokens.HOME, audio.post_pets, dataSources))
-            .reprompt(petAgainPrompt)
-            .getResponse();
-    }
-};
-
-// Invoked when a user wants to train
-const TrainIntentHandler = {
-    canHandle(handlerInput) {
-        return isIntentRequestWithIntentName(handlerInput, 'TrainIntent')
             || isYes(handlerInput, states.GIVE_PETS);
     },
     handle(handlerInput) {
