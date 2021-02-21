@@ -17,3 +17,6 @@ module.exports.pet_shop = require('./pet_shop.json');
 module.exports.post_pets = require('./post_pets.json');
 module.exports.single_animal_presentation = require('./single_animal_presentation.json');
 module.exports.take_pet_home = require('./take_pet_home.json');
+module.exports.launch_ear_trainer = require('./launch_ear_trainer.json');
+module.exports.train = require('./train.json');
+module.exports.training_answer = require('./training_answer.json');
