@@ -17,7 +17,10 @@ const tokens = {
     PET_SHOP: 'PET_SHOP',
     ANIMAL_TYPE_SELECTED: 'ANIMAL_TYPE_SELECTED',
     SINGLE_ANIMAL: 'SINGLE_ANIMAL',
-    TAKE_PET_HOME: 'TAKE_PET_HOME'
+    TAKE_PET_HOME: 'TAKE_PET_HOME',
+    LAUNCH: 'LAUNCH',
+    TRAIN: 'TRAIN',
+    ANSWER: 'ANSWER',
 };
 
 module.exports.tokens = tokens;

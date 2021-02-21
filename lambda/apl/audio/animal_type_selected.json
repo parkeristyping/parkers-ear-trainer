@@ -12,7 +12,7 @@
         {
           "type": "Speech",
           "contentType": "SSML",
-          "content": "<speak>${payload.data.properties.alexasResponse} foo</speak>"
+          "content": "<speak>${payload.data.properties.alexasResponse}</speak>"
         },
         {
           "type": "Speech",

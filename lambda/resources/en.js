@@ -3,6 +3,11 @@
 const {getPetAudio, getPetVoice} = require('./utils');
 
 module.exports = {
+    LAUNCH_EAR_TRAINER: "Welcome to the ear trainer! Here's how it works. I play some chords in a key and then a note in that key. Then, you guess the name of the note I played. Your response should be the solfège name, like doe, ray, or me. Doe is always the root. Would you like to get started training?",
+    LAUNCH_EAR_TRAINER_REPROMPT: "Would you like to begin training? Say yes if so.",
+    TRAIN_REPROMPT: "Please respond with a note name, like doe, ray, or me.",
+    CONTINUE_TRAINING_REPROMPT: "Would you like to continue?",
+    ANOTHER_TRAINING_QUESTION: "Again?",
     GENERIC_GREETING: "Hey there.",
     GENERIC_RETURN_GREETING: "Great to see you back.",
     VISIT_PET_SHOP_PROMPT: "So happy to see you. A new digital pet store opened up in town, Posh Pets. It has all types of cute and adorable pets. They just got in some dogs and cats. Would you be interested in going over there with me and finding one for yourself?",

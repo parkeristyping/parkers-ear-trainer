@@ -24,7 +24,8 @@ const {
     isIntentRequestWithIntentName,
     isOneOfIntentNames,
     isYes,
-    isNo
+    isNo,
+    isTrainingAnswer,
 } = utils;
 
 const languageStrings = require('./resources/languageStrings'); // Localized resources used by the localization client
@@ -43,6 +44,18 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
+
+        // Translate prompts in the user's locale
+        const dataSources = {
+            launchEarTrainer: handlerInput.t('LAUNCH_EAR_TRAINER');
+        };
+
+        return handlerInput.responseBuilder
+            .addDirective(utils.getAplADirective(tokens.LAUNCH, audio.launch_ear_trainer, dataSources))
+            .reprompt(handlerInput.t('LAUNCH_EAR_TRAINER_REPROMPT'))
+            .getResponse();
 
         // Sound effects and visuals throughout the experience will be based on the user's time of day
         // This is fetched once per session
@@ -63,6 +76,55 @@ const LaunchRequestHandler = {
             sessionAttributes.state = states.GIVE_PETS;
             return getAdoptedPetsResponse(handlerInput, adoptedPets);
         }
+    }
+};
+
+// Invoked when a user wants to begin training
+const TrainIntentHandler = {
+    canHandle(handlerInput) {
+        return isIntentRequestWithIntentName(handlerInput, 'TrainIntent')
+            || isYes(handlerInput, states.LAUNCH_EAR_TRAINER);
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        sessionAttributes.state = states.TRAINING;
+        sessionAttributes.noteId = "Fa";
+
+        let dataSources = {
+            prompt: 'This is where the music will play.',
+        };
+
+        return handlerInput.responseBuilder
+            .addDirective(utils.getAplADirective(tokens.TRAIN, audio.train, dataSources))
+            .reprompt(handlerInput.t('TRAIN_REPROMPT'))
+            .getResponse();
+    }
+};
+
+// Invoked when a user answers a training question
+const AnswerTrainingQuestionIntentHandler = {
+    canHandle(handlerInput) {
+        return isTrainingAnswer(handlerInput, states.TRAINING);
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
+
+        const noteId = _.first(utils.getSlotResolutionIds(handlerInput, 'note'));
+        let correct = noteId === sessionAttributes.noteId;
+        
+        let dataSources = {
+            result: correct ? "Ding" : "Bzzt",
+            resolution: 'This is where the resolution will play.',
+            askForAnother: handlerInput.t('ANOTHER_TRAINING_QUESTION'),
+        };
+
+        return handlerInput.responseBuilder
+            .addDirective(utils.getAplADirective(tokens.ANSWER, audio.training_answer, dataSources))
+            .reprompt(handlerInput.t('CONTINUE_TRAINING_REPROMPT'))
+            .getResponse();
     }
 };
 
@@ -458,6 +520,33 @@ const GivePetsIntentHandler = {
     }
 };
 
+// Invoked when a user wants to train
+const TrainIntentHandler = {
+    canHandle(handlerInput) {
+        return isIntentRequestWithIntentName(handlerInput, 'TrainIntent')
+            || isYes(handlerInput, states.GIVE_PETS);
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        // Translate prompts
+        const petAgainPrompt = handlerInput.t('GIVE_MORE_PETS', {
+            pet: getPetTranslations(handlerInput, sessionAttributes.pet)
+        });
+
+        const dataSources = {
+            petsResponse: handlerInput.randomT('THANKS_FOR_PETS', {context: sessionAttributes.pet.name}),
+            pet: sessionAttributes.pet,
+            petAgain: petAgainPrompt
+        };
+
+        return handlerInput.responseBuilder
+            .addDirective(utils.getAplADirective(tokens.HOME, audio.post_pets, dataSources))
+            .reprompt(petAgainPrompt)
+            .getResponse();
+    }
+};
+
 function getPetTranslations(handlerInput, pet) {
     return {
         name: handlerInput.t('PET_NAME', {context: pet.name}),
@@ -597,6 +686,8 @@ const PetShopServiceInterceptor = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
+        TrainIntentHandler,
+        AnswerTrainingQuestionIntentHandler,
         VisitPetStoreIntentHandler,
         BrowsePetsByTypeIntentHandler,
         DoNotAdoptPetIntentHandler,

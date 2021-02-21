@@ -29,6 +29,12 @@ function isYes(handlerInput, state) {
         && isSessionState(handlerInput, state);
 }
 
+function isTrainingAnswer(handlerInput, state) {
+    return isRequestType(handlerInput, 'IntentRequest')
+        && isIntentName(handlerInput, 'TrainingAnswerIntent')
+        && isSessionState(handlerInput, state);
+}
+
 function isNo(handlerInput, state) {
     return isRequestType(handlerInput, 'IntentRequest')
         && isIntentName(handlerInput, 'AMAZON.NoIntent')
@@ -126,6 +132,7 @@ module.exports = {
     isOneOfIntentNames,
     isIntentRequestWithIntentName,
     isSessionState,
+    isTrainingAnswer,
     isYes,
     isNo,
     getPerson,

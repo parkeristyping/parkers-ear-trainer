@@ -1,0 +1,30 @@
+{
+  "type": "APLA",
+  "version": "0.8",
+  "description": "This document contains the resolution of a training question.",
+  "mainTemplate": {
+    "parameters": [
+      "payload"
+    ],
+    "item": {
+      "type": "Sequencer",
+      "items": [
+        {
+          "type": "Speech",
+          "contentType": "SSML",
+          "content": "<speak>${payload.data.properties.result}</speak>"
+        },
+        {
+          "type": "Speech",
+          "contentType": "SSML",
+          "content": "<speak>${payload.data.properties.resolution}</speak>"
+        },
+        {
+          "type": "Speech",
+          "contentType": "SSML",
+          "content": "<speak>${payload.data.properties.askForAnother}</speak>"
+        }
+      ]
+    }
+  }
+}
