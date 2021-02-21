@@ -35,47 +35,27 @@ const {tokens, audio, visual} = require('./apl'); // APL & APL-A documents
 // A service for managing pets
 const PetShopService = require('./petShopService');
 
-// Invoked when a user launches the skill or wants to play again after adopting a pet
+// Invoked when a user launches the skill 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return isRequestType(handlerInput, 'LaunchRequest')
             || isIntentRequestWithIntentName(handlerInput, 'AMAZON.StartOverIntent')
             || isYes(handlerInput, states.PLAY_AGAIN);
     },
-    async handle(handlerInput) {
+    handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
 
         // Translate prompts in the user's locale
         const dataSources = {
-            launchEarTrainer: handlerInput.t('LAUNCH_EAR_TRAINER');
+            launchEarTrainer: handlerInput.t('LAUNCH_EAR_TRAINER')
         };
 
         return handlerInput.responseBuilder
             .addDirective(utils.getAplADirective(tokens.LAUNCH, audio.launch_ear_trainer, dataSources))
             .reprompt(handlerInput.t('LAUNCH_EAR_TRAINER_REPROMPT'))
             .getResponse();
-
-        // Sound effects and visuals throughout the experience will be based on the user's time of day
-        // This is fetched once per session
-        const hour = await getCurrentHour(handlerInput);
-        sessionAttributes.isDayTime = hour >= 7 && hour <= 21; // We say day time is between 7 AM and 9 PM
-        console.log("isDayTime", sessionAttributes.isDayTime);
-
-        // Get the user's adopted pets
-        const {petShopService} = handlerInput;
-        const adoptedPets = await petShopService.getAdoptedPets();
-
-        if (_.isEmpty(adoptedPets)) {
-            // User has not pets; offer to go to the pet shop
-            sessionAttributes.state = states.VISIT_PET_SHOP;
-            return getNoAdoptedPetsResponse(handlerInput);
-        } else {
-            // User has adopted pets; offer to pet one
-            sessionAttributes.state = states.GIVE_PETS;
-            return getAdoptedPetsResponse(handlerInput, adoptedPets);
-        }
     }
 };
 
@@ -89,7 +69,7 @@ const TrainIntentHandler = {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
 
         sessionAttributes.state = states.TRAINING;
-        sessionAttributes.noteId = "Fa";
+        sessionAttributes.noteId = "fa";
 
         let dataSources = {
             prompt: 'This is where the music will play.',
@@ -113,7 +93,7 @@ const AnswerTrainingQuestionIntentHandler = {
         sessionAttributes.state = states.LAUNCH_EAR_TRAINER;
 
         const noteId = _.first(utils.getSlotResolutionIds(handlerInput, 'note'));
-        let correct = noteId === sessionAttributes.noteId;
+        const correct = noteId === sessionAttributes.noteId;
         
         let dataSources = {
             result: correct ? "Ding" : "Bzzt",
