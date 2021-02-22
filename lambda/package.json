@@ -20,7 +20,8 @@
     "i18next": "19.1.0",
     "lodash": "4.17.15",
     "moment": "2.24.0",
-    "moment-timezone": "0.5.31"
+    "moment-timezone": "0.5.31",
+    "@tonaljs/tonal": "4.6.0",
   },
   "devDependencies": {
     "eslint": "7.1.0"
