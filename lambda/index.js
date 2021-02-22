@@ -94,6 +94,10 @@ const AnswerTrainingQuestionIntentHandler = {
 
         const noteId = _.first(utils.getSlotResolutionIds(handlerInput, 'note'));
         const correct = noteId === sessionAttributes.noteId;
+
+        console.log("Note ID:", noteId);
+        console.log("Session Note ID:", sessionAttributes.noteId);
+        console.log("Correct:", correct);
         
         let dataSources = {
             result: correct ? "Ding" : "Bzzt",
