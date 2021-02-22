@@ -26,6 +26,7 @@ const {
     isYes,
     isNo,
     isTrainingAnswer,
+    getS3PreSignedUrl,
 } = utils;
 
 const languageStrings = require('./resources/languageStrings'); // Localized resources used by the localization client
@@ -71,8 +72,9 @@ const TrainIntentHandler = {
         sessionAttributes.state = states.TRAINING;
         sessionAttributes.noteId = "fa";
 
-        let dataSources = {
-            prompt: 'This is where the music will play.',
+        const audioUrl = getS3PreSignedUrl('Media/notes/12.mp3')
+        const dataSources = {
+            prompt: `<audio src="${_.escape(audioUrl)}"/>`
         };
 
         return handlerInput.responseBuilder
@@ -95,10 +97,6 @@ const AnswerTrainingQuestionIntentHandler = {
         const noteId = _.first(utils.getSlotResolutionIds(handlerInput, 'note'));
         const correct = noteId === sessionAttributes.noteId;
 
-        console.log("Note ID:", noteId);
-        console.log("Session Note ID:", sessionAttributes.noteId);
-        console.log("Correct:", correct);
-        
         let dataSources = {
             result: correct ? "Ding" : "Bzzt",
             resolution: 'This is where the resolution will play.',

@@ -1,5 +1,26 @@
 const Alexa = require('ask-sdk');
 const _ = require('lodash');
+const AWS = require('aws-sdk');
+
+const s3SigV4Client = new AWS.S3({
+    signatureVersion: 'v4'
+});
+
+// get pre-signed S3 URL
+function getS3PreSignedUrl(s3ObjectKey) {
+
+    const bucketName = process.env.S3_PERSISTENCE_BUCKET;
+    
+    const s3PreSignedUrl = s3SigV4Client.getSignedUrl('getObject', {
+        Bucket: bucketName,
+        Key: s3ObjectKey,
+        Expires: 60*1 // the Expires is capped for 1 minute
+    });
+
+    console.log(`Util.s3PreSignedUrl: ${s3ObjectKey} URL ${s3PreSignedUrl}`); // you can see those on CloudWatch
+
+    return s3PreSignedUrl;
+}
 
 function isRequestType(handlerInput, requestType) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === requestType;
@@ -143,5 +164,6 @@ module.exports = {
     isAplSupported,
     addAplIfSupported,
     getAplADirective,
-    disjunction
+    disjunction,
+    getS3PreSignedUrl,
 };
