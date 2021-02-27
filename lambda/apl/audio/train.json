@@ -13,17 +13,17 @@
         {
           "type": "Audio",
           "description": "Chord note 1",
-          "source": "${payload.data.properties.chord_one}"
+          "source": "${payload.data.properties.chords[0][0]}"
         },
         {
           "type": "Audio",
           "description": "Chord note 2",
-          "source": "${payload.data.properties.chord_two}"
+          "source": "${payload.data.properties.chords[0][1]}"
         },
         {
           "type": "Audio",
           "description": "Chord note 3",
-          "source": "${payload.data.properties.chord_three}"
+          "source": "${payload.data.properties.chords[0][2]}"
         }
       ]
     }

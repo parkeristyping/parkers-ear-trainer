@@ -81,9 +81,13 @@ const TrainIntentHandler = {
         const audioUrl2 = getS3PreSignedUrl(`Media/notes/${note2}.mp3`)
         const audioUrl3 = getS3PreSignedUrl(`Media/notes/${note3}.mp3`)
         const dataSources = {
-            chord_one: audioUrl1,
-            chord_two: audioUrl2,
-            chord_three: audioUrl3 
+            chords: [
+                [
+                    audioUrl1,
+                    audioUrl2,
+                    audioUrl3 
+                ]
+            ]
         };
 
         return handlerInput.responseBuilder
