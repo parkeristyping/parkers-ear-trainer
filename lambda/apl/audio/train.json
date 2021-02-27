@@ -24,7 +24,7 @@
           "type": "Audio",
           "description": "Chord note 3",
           "source": "${payload.data.properties.chord_three}"
-        },
+        }
       ]
     }
   }
