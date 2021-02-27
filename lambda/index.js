@@ -16,7 +16,7 @@ const persistenceAdapter = require('ask-sdk-dynamodb-persistence-adapter'); // A
 const i18next = require('i18next');
 const _ = require('lodash'); // Library for simplifying common tasks
 const moment = require('moment-timezone'); // Used to calculate the user's time of day
-const { Note, Scale } = require("@tonaljs/tonal");
+const { Note, Chord } = require("@tonaljs/tonal");
 
 
 // Utilities for common functions
@@ -74,10 +74,16 @@ const TrainIntentHandler = {
         sessionAttributes.state = states.TRAINING;
         sessionAttributes.noteId = "fa";
 
-        const note = Note.midi("F3");
-        const audioUrl = getS3PreSignedUrl(`Media/notes/${note}.mp3`)
+        const note1 = Note.midi("C3");
+        const note2 = Note.midi("E3");
+        const note3 = Note.midi("G3");
+        const audioUrl1 = getS3PreSignedUrl(`Media/notes/${note1}.mp3`)
+        const audioUrl2 = getS3PreSignedUrl(`Media/notes/${note2}.mp3`)
+        const audioUrl3 = getS3PreSignedUrl(`Media/notes/${note3}.mp3`)
         const dataSources = {
-            prompt: `<audio src="${_.escape(audioUrl)}"/>`
+            chord_one: audioUrl1,
+            chord_two: audioUrl2,
+            chord_three: audioUrl3 
         };
 
         return handlerInput.responseBuilder

@@ -7,13 +7,24 @@
       "payload"
     ],
     "item": {
-      "type": "Sequencer",
+      "type": "Mixer",
+      "description": "Plays a chord",
       "items": [
         {
-          "type": "Speech",
-          "contentType": "SSML",
-          "content": "<speak>${payload.data.properties.prompt}</speak>"
-        }
+          "type": "Audio",
+          "description": "Chord note 1",
+          "source": "${payload.data.properties.chord_one}"
+        },
+        {
+          "type": "Audio",
+          "description": "Chord note 2",
+          "source": "${payload.data.properties.chord_two}"
+        },
+        {
+          "type": "Audio",
+          "description": "Chord note 3",
+          "source": "${payload.data.properties.chord_three}"
+        },
       ]
     }
   }
