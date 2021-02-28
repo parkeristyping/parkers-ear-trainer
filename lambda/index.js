@@ -69,21 +69,6 @@ const TrainIntentHandler = {
             || isYes(handlerInput, states.LAUNCH_EAR_TRAINER);
     },
     handle(handlerInput) {
-        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-
-        sessionAttributes.state = states.TRAINING;
-        sessionAttributes.noteId = "fa";
-
-        const solfege = [
-            "do",
-            "re",
-            "mi",
-            "fa",
-            "so",
-            "la",
-            "ti"
-        ];
-
         const key = "C";
         const octave = 3;
         const keyData = Key.majorKey(key);
@@ -98,7 +83,29 @@ const TrainIntentHandler = {
             });
         });
 
-        const dataSources = { chords: progressionAudio };
+        const quizNoteName = _.sample(keyData.scale);
+        const quizNoteOctave = _.sample([2, 3, 4]);
+        const quizNoteNumber = Note.get(`${quizNoteName}${quizNoteOctave}`).midi - 21;
+        const quizNoteAudio = getS3PreSignedUrl(`Media/notes/${quizNoteNumber}.mp3`);
+        const solfege = [
+            "do",
+            "re",
+            "mi",
+            "fa",
+            "so",
+            "la",
+            "ti"
+        ];
+        const quizNoteSolfege = solfege[keyData.scale.indexOf(quizNoteName)];
+
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        sessionAttributes.state = states.TRAINING;
+        sessionAttributes.noteId = quizNoteSolfege;
+
+        const dataSources = { 
+            chords: progressionAudio,
+            quizNote: quizNoteAudio
+        };
         return handlerInput.responseBuilder
             .addDirective(utils.getAplADirective(tokens.TRAIN, audio.train, dataSources))
             .reprompt(handlerInput.t('TRAIN_REPROMPT'))
