@@ -100,7 +100,10 @@ const TrainIntentHandler = {
 
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.state = states.TRAINING;
+        sessionAttributes.key = key;
+        sessionAttributes.octave = quizNoteOctave;
         sessionAttributes.noteId = quizNoteSolfege;
+
 
         const dataSources = { 
             chords: progressionAudio,

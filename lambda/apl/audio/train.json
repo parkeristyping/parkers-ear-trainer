@@ -85,7 +85,7 @@
           "type": "Audio",
           "description": "Quiz note",
           "source": "${payload.data.properties.quizNote}"
-        },
+        }
       ]
     }
   }
