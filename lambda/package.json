@@ -1,6 +1,6 @@
 {
   "name": "parkers-ear-trainer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Lambda function for an Alexa skill",
   "main": "index.js",
   "author": "Amazon.com",
