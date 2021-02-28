@@ -104,6 +104,7 @@ const TrainIntentHandler = {
         sessionAttributes.octave = quizNoteOctave;
         sessionAttributes.noteId = quizNoteSolfege;
 
+
         const dataSources = { 
             chords: progressionAudio,
             quizNote: quizNoteAudio
