@@ -16,7 +16,7 @@ const persistenceAdapter = require('ask-sdk-dynamodb-persistence-adapter'); // A
 const i18next = require('i18next');
 const _ = require('lodash'); // Library for simplifying common tasks
 const moment = require('moment-timezone'); // Used to calculate the user's time of day
-const { Note, Chord } = require("@tonaljs/tonal");
+const { Key, Note, Chord } = require("@tonaljs/tonal");
 
 
 // Utilities for common functions
@@ -74,22 +74,31 @@ const TrainIntentHandler = {
         sessionAttributes.state = states.TRAINING;
         sessionAttributes.noteId = "fa";
 
-        const note1 = Note.midi("C3");
-        const note2 = Note.midi("E3");
-        const note3 = Note.midi("G3");
-        const audioUrl1 = getS3PreSignedUrl(`Media/notes/${note1}.mp3`)
-        const audioUrl2 = getS3PreSignedUrl(`Media/notes/${note2}.mp3`)
-        const audioUrl3 = getS3PreSignedUrl(`Media/notes/${note3}.mp3`)
-        const dataSources = {
-            chords: [
-                [
-                    audioUrl1,
-                    audioUrl2,
-                    audioUrl3 
-                ]
-            ]
-        };
+        const solfege = [
+            "do",
+            "re",
+            "mi",
+            "fa",
+            "so",
+            "la",
+            "ti"
+        ];
 
+        const key = "C";
+        const octave = 3;
+        const keyData = Key.majorKey(key);
+        const progressionChordNames = [1, 4, 5, 1].map((step) => {
+            return keyData.chords[step - 1];
+        })
+        const progressionAudio = progressionChordNames.map((chordName) => {
+            const chord = Chord.get(chordName);
+            return chord.notes.map((note) => {
+                const noteNumber = Note.get(`${note}${octave}`).midi - 21;
+                return getS3PreSignedUrl(`Media/notes/${noteNumber}.mp3`);
+            });
+        });
+
+        const dataSources = { chords: progressionAudio };
         return handlerInput.responseBuilder
             .addDirective(utils.getAplADirective(tokens.TRAIN, audio.train, dataSources))
             .reprompt(handlerInput.t('TRAIN_REPROMPT'))

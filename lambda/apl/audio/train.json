@@ -7,23 +7,91 @@
       "payload"
     ],
     "item": {
-      "type": "Mixer",
-      "description": "Plays a chord",
+      "type": "Sequencer",
       "items": [
         {
-          "type": "Audio",
-          "description": "Chord note 1",
-          "source": "${payload.data.properties.chords[0][0]}"
+          "type": "Mixer",
+          "description": "Plays a chord",
+          "items": [
+            {
+              "type": "Audio",
+              "description": "Chord note 1",
+              "source": "${payload.data.properties.chords[0][0]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 2",
+              "source": "${payload.data.properties.chords[0][1]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 3",
+              "source": "${payload.data.properties.chords[0][2]}"
+            }
+          ]
         },
         {
-          "type": "Audio",
-          "description": "Chord note 2",
-          "source": "${payload.data.properties.chords[0][1]}"
+          "type": "Mixer",
+          "description": "Plays a chord",
+          "items": [
+            {
+              "type": "Audio",
+              "description": "Chord note 1",
+              "source": "${payload.data.properties.chords[1][0]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 2",
+              "source": "${payload.data.properties.chords[1][1]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 3",
+              "source": "${payload.data.properties.chords[1][2]}"
+            }
+          ]
         },
         {
-          "type": "Audio",
-          "description": "Chord note 3",
-          "source": "${payload.data.properties.chords[0][2]}"
+          "type": "Mixer",
+          "description": "Plays a chord",
+          "items": [
+            {
+              "type": "Audio",
+              "description": "Chord note 1",
+              "source": "${payload.data.properties.chords[2][0]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 2",
+              "source": "${payload.data.properties.chords[2][1]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 3",
+              "source": "${payload.data.properties.chords[2][2]}"
+            }
+          ]
+        },
+        {
+          "type": "Mixer",
+          "description": "Plays a chord",
+          "items": [
+            {
+              "type": "Audio",
+              "description": "Chord note 1",
+              "source": "${payload.data.properties.chords[3][0]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 2",
+              "source": "${payload.data.properties.chords[3][1]}"
+            },
+            {
+              "type": "Audio",
+              "description": "Chord note 3",
+              "source": "${payload.data.properties.chords[3][2]}"
+            }
+          ]
         }
       ]
     }
