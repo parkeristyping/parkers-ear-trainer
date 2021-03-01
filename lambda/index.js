@@ -123,7 +123,7 @@ const AnswerTrainingQuestionIntentHandler = {
         const degree = solfege.indexOf(sessionAttributes.noteId);
         let resolutionNoteNames;
         if (degree < 4) {
-          resolutionNoteNames = keyData.scale.slice(0, degree + 1);
+          resolutionNoteNames = keyData.scale.slice(0, degree + 1).reverse();
         } else {
           resolutionNoteNames = keyData.scale.slice(degree).concat(['octave']);
         }
