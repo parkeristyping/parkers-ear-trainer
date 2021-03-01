@@ -129,9 +129,38 @@ const AnswerTrainingQuestionIntentHandler = {
         const noteId = _.first(utils.getSlotResolutionIds(handlerInput, 'note'));
         const correct = noteId === sessionAttributes.noteId;
 
+        const solfege = [
+            "do",
+            "re",
+            "mi",
+            "fa",
+            "so",
+            "la",
+            "ti"
+        ];
+        const keyData = Key.majorKey(sessionAttributes.key);
+        const root = keyData.scale[0];
+        const degree = solfege.indexOf(sessionAttributes.noteId);
+        let resolutionNoteNames;
+        if (degree < 4) {
+          resolutionNoteNames = keyData.scale.slice(0, degree + 1);
+        } else {
+          resolutionNoteNames = keyData.scale.slice(degree).concat(['octave']);
+        }
+        const resolution = resolutionNoteNames.map((note) => {
+            let midi;
+            if (note === 'octave') {
+              midi = Note.get(`${root}${sessionAttributes.octave + 1}`).midi;
+            } else {
+              midi = Note.get(`${note}${sessionAttributes.octave}`).midi;
+            }
+            const url = getS3PreSignedUrl(`Media/notes/${midi - 21}.mp3`);
+            return `<audio src="${url}" />`;
+        }).join('');
+
         let dataSources = {
-            result: correct ? "Ding" : "Bzzt",
-            resolution: 'This is where the resolution will play.',
+            result: correct ? "soundbank://soundlibrary/musical/amzn_sfx_bell_short_chime_01" : "soundbank://soundlibrary/alarms/beeps_and_bloops/buzz_02",
+            resolution: resolution,
             askForAnother: handlerInput.t('ANOTHER_TRAINING_QUESTION'),
         };
 

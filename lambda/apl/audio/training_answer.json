@@ -10,9 +10,9 @@
       "type": "Sequencer",
       "items": [
         {
-          "type": "Speech",
-          "contentType": "SSML",
-          "content": "<speak>${payload.data.properties.result}</speak>"
+          "type": "Audio",
+          "description": "Ding or buzz sound effect for right or wrong answer, respectively",
+          "source": "${payload.data.properties.result}"
         },
         {
           "type": "Speech",
